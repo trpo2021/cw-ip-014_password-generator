@@ -4,4 +4,5 @@ project(PGen)
 set(CMAKE_CXX_STANDARD 11)
 
 include_directories(3rdparty)
-add_executable(PGen main.cpp)
+include_directories(/)
+add_executable(PGen main.cpp PasswordGenerator.cpp PasswordGenerator.h)
