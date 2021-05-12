@@ -1,12 +1,13 @@
 #include "PasswordGenerator.h"
+#include <climits>
 
 const std::string CHARS_ARRAY
         = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%"
           "&'()*+,-./:;<=>?@";
-const std::uniform_int_distribution<int> NUM_LET_LIMIT(0, 9);
-const std::uniform_int_distribution<int> LOW_LET_LIMIT(10, 35);
-const std::uniform_int_distribution<int> UP_LET_LIMIT(36, 62);
-const std::uniform_int_distribution<int> SPEC_SYM_LIMIT(63, 84);
+std::uniform_int_distribution<int> NUM_LET_LIMIT(0, 9);
+std::uniform_int_distribution<int> LOW_LET_LIMIT(10, 35);
+std::uniform_int_distribution<int> UP_LET_LIMIT(36, 62);
+std::uniform_int_distribution<int> SPEC_SYM_LIMIT(63, 84);
 
 inline bool PasswordGenerator::IsValidInt(int num)
 {
