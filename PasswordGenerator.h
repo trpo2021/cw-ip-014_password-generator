@@ -10,12 +10,12 @@ private:
     int amount = 1;
     int length = 8;
     inline bool IsValidInt(int num);
-    std::string mask;
+    std::string m_mask;
 
 public:
     char GenerateRandomChar(CHAR_TYPE char_type);
     char GenerateMaskChar(char symbol);
-    void SetPasswordMask(std::string& mask);
+    void SetPasswordMask(const std::string& mask);
     void SetPasswordLength(int len);
     std::string GeneratePassword();
     PasswordGenerator() : rnd_gen(time(NULL))

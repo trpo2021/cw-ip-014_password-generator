@@ -6,7 +6,7 @@ const std::string CHARS_ARRAY
           "&'()*+,-./:;<=>?@";
 std::uniform_int_distribution<int> NUM_LET_LIMIT(0, 9);
 std::uniform_int_distribution<int> LOW_LET_LIMIT(10, 35);
-std::uniform_int_distribution<int> UP_LET_LIMIT(36, 62);
+std::uniform_int_distribution<int> UP_LET_LIMIT(36, 61);
 std::uniform_int_distribution<int> SPEC_SYM_LIMIT(63, 84);
 
 inline bool PasswordGenerator::IsValidInt(int num)
@@ -59,22 +59,22 @@ char PasswordGenerator::GenerateMaskChar(char symbol)
 std::string PasswordGenerator::GeneratePassword()
 {
     std::string pass;
-    if (mask.empty()) {
+    if (m_mask.empty()) {
         pass.resize(length + 1);
         for (auto& x : pass)
             x = GenerateRandomChar(CHAR_TYPE::LOW_CHAR);
         return pass;
     } else {
-        pass.resize(mask.length() + 1);
+        pass.resize(m_mask.length() + 1);
         for (int a = 0; a < pass.size(); a++)
-            pass[a] = GenerateMaskChar(mask[a]);
+            pass[a] = GenerateMaskChar(m_mask[a]);
         return pass;
     }
 }
 
-void PasswordGenerator::SetPasswordMask(std::string& mask)
+void PasswordGenerator::SetPasswordMask(const std::string& mask)
 {
-    mask = mask;
+    m_mask = mask;
 }
 
 void PasswordGenerator::SetPasswordLength(int len)
