@@ -57,5 +57,4 @@ jobs:
       if: runner.os == 'Windows'
       working-directory: ${{github.workspace}}/build
       shell: bash
-      #D:\\a\\pgen_dev\\pgen_dev\\build\\Release\\PGenTests.exe
-      run: D:\\a\\pgen_dev\\pgen_dev\\build\\Release\\PGenTests.exe
+      run: D:\\a\\cw-ip-014_password-generator\\cw-ip-014_password-generator\\build\\Release\\PGenTests.exe
