@@ -13,7 +13,7 @@ private:
     char GenerateRandomChar(CHAR_TYPE char_type);
 
 public:
-    void SetPasswordsLength(int count);
+    void SetPasswordsLength(int len);
     std::string GeneratePassword();
     PasswordGenerator() : rnd_gen(time(NULL))
     {

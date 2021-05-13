@@ -47,7 +47,7 @@ std::string PasswordGenerator::GeneratePassword()
 void PasswordGenerator::SetPasswordsLength(int len)
 {
     if (IsValidInt(len))
-        len = len;
+        length = len;
     else
         std::cout << "Set amount of generated passwords is incorrect.\n";
 }
