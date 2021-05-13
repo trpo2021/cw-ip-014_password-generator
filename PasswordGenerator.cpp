@@ -11,22 +11,22 @@ std::uniform_int_distribution<int> SPEC_SYM_LIMIT(63, 84);
 
 inline bool PasswordGenerator::IsValidInt(int num)
 {
-    return (num > 1 && num < INT_MAX - 1);
+    return (num >= 1 && num <= INT_MAX - 1);
 }
 
 char PasswordGenerator::GenerateRandomChar(CHAR_TYPE char_type)
 {
     switch (char_type) {
-    case CHAR_TYPE::UP_LETTER:
+    case CHAR_TYPE::UP_CHAR:
         return CHARS_ARRAY[UP_LET_LIMIT(rnd_gen)];
         break;
-    case CHAR_TYPE::LOW_LETTER:
+    case CHAR_TYPE::LOW_CHAR:
         return CHARS_ARRAY[LOW_LET_LIMIT(rnd_gen)];
         break;
-    case CHAR_TYPE::NUM_LETTER:
+    case CHAR_TYPE::NUM_CHAR:
         return CHARS_ARRAY[NUM_LET_LIMIT(rnd_gen)];
         break;
-    case CHAR_TYPE::SPEC_SYMBOL:
+    case CHAR_TYPE::SPEC_CHAR:
         return CHARS_ARRAY[SPEC_SYM_LIMIT(rnd_gen)];
         break;
     default:
@@ -35,16 +35,49 @@ char PasswordGenerator::GenerateRandomChar(CHAR_TYPE char_type)
     }
 }
 
+char PasswordGenerator::GenerateMaskChar(char symbol)
+{
+    switch (symbol) {
+    case 'L':
+        return GenerateRandomChar(CHAR_TYPE::LOW_CHAR);
+        break;
+    case 'U':
+        return GenerateRandomChar(CHAR_TYPE::UP_CHAR);
+        break;
+    case 'N':
+        return GenerateRandomChar(CHAR_TYPE::NUM_CHAR);
+        break;
+    case 'S':
+        return GenerateRandomChar(CHAR_TYPE::SPEC_CHAR);
+        break;
+    default:
+        return symbol;
+        break;
+    }
+}
+
 std::string PasswordGenerator::GeneratePassword()
 {
     std::string pass;
-    pass.resize(length + 1);
-    for (auto& x : pass)
-        x = GenerateRandomChar(CHAR_TYPE::LOW_LETTER);
-    return pass;
+    if (mask.empty()) {
+        pass.resize(length + 1);
+        for (auto& x : pass)
+            x = GenerateRandomChar(CHAR_TYPE::LOW_CHAR);
+        return pass;
+    } else {
+        pass.resize(mask.length() + 1);
+        for (int a = 0; a < pass.size(); a++)
+            pass[a] = GenerateMaskChar(mask[a]);
+        return pass;
+    }
 }
 
-void PasswordGenerator::SetPasswordsLength(int len)
+void PasswordGenerator::SetPasswordMask(std::string& mask)
+{
+    mask = mask;
+}
+
+void PasswordGenerator::SetPasswordLength(int len)
 {
     if (IsValidInt(len))
         length = len;
