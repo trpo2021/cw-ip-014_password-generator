@@ -389,3 +389,6 @@ FodyWeavers.xsd
 
 #PGen temp files
 build
+
+#Local VS config (was uploaded once, no need to sync)
+launch.vs.json

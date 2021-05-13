@@ -46,3 +46,16 @@ jobs:
       shell: bash
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       run: cmake --build . --config $BUILD_TYPE
+      
+    - name: Run tests (unix)
+      if: runner.os != 'Windows'
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: ${{github.workspace}}/build/PGenTests
+      
+    - name: Run tests (win)
+      if: runner.os == 'Windows'
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      #D:\\a\\pgen_dev\\pgen_dev\\build\\Release\\PGenTests.exe
+      run: D:\\a\\pgen_dev\\pgen_dev\\build\\Release\\PGenTests.exe

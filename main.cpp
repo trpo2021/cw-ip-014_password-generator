@@ -2,22 +2,12 @@
 #include "argh.h"
 #include <iostream>
 
-void InitCmdArgs(argh::parser& parser, int argc, char* argv[])
-{
-    parser.add_params({"--count", "-c"});
-    parser.parse(argc, argv);
-}
-
 int main(int argc, char* argv[])
 {
     PasswordGenerator pgen;
-    auto cmdl = argh::parser(
-            argc, argv);
-    InitCmdArgs(cmdl, argc, argv);
-    for (auto& x : cmdl.params()) {
-        std::cout << x.first << " " << x.second << "\n";
-    }
-    for (int a = 0; a < stoi(cmdl("--count", 1).str()); a++) {
+    auto cmdl = argh::parser(argc, argv);
+    cmdl.parse(argc, argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
+    for (int a = 0; a < std::stoi(cmdl({"--count","-c"}, 1).str()); a++) {
         std::cout << pgen.GeneratePassword() << "\n";
     }
 }

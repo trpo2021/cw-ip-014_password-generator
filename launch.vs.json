@@ -6,7 +6,7 @@
       "type": "default",
       "project": "out\\build\\x64-Debug\\PGen.exe",
       "name": "PGen with cmd : debug",
-      "args": [ "" ]
+      "args": [ "--count 10" ]
     },
     {
       "type": "default",
