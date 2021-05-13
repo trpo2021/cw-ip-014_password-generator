@@ -11,9 +11,13 @@ void InitCmdArgs(argh::parser& parser, int argc, char* argv[])
 int main(int argc, char* argv[])
 {
     PasswordGenerator pgen;
-    auto cmdl = argh::parser(argc, argv);
+    auto cmdl = argh::parser(
+            argc, argv);
     InitCmdArgs(cmdl, argc, argv);
+    for (auto& x : cmdl.params()) {
+        std::cout << x.first << " " << x.second << "\n";
+    }
     for (int a = 0; a < stoi(cmdl("--count", 1).str()); a++) {
-        std::cout << pgen.GeneratePassword();
+        std::cout << pgen.GeneratePassword() << "\n";
     }
 }
