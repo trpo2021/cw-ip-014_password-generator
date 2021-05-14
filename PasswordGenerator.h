@@ -9,7 +9,7 @@ private:
     std::mt19937_64 rnd_gen;
     int amount = 1;
     int length = 8;
-    inline bool IsValidInt(int num);
+    inline bool IsValidInt(int num, bool limit_shift = false);
     std::string m_mask;
 
 public:

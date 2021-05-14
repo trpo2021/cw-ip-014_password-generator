@@ -82,18 +82,18 @@ int main(int argc, char* argv[])
         PasswordGenerator pgen;
         cmdl.parse(
                 argc, argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
-        pgen.SetPasswordLength(GetCmdInt({"--length", "-l"}, 8) - 1);
+        pgen.SetPasswordLength(GetCmdInt({"--length", "-l"}, 8));
         pgen.SetPasswordMask(cmdl({"--mask", "-m"}, "").str());
         pgen.SetPasswordSeed(GetCmdInt({"--seed", "-se"}, time(NULL)));
         std::string seperator = cmdl({"--seperator", "-s"}, '\n').str();
         std::string out_file = cmdl({"--outFile", "-of"}, "").str();
         if (out_file.empty()) {
-            for (int a = 0; a < GetCmdInt({"--count", "-c"}, 8) - 1; a++) {
+            for (int a = 0; a < GetCmdInt({"--count", "-c"}, 8); a++) {
                 std::cout << pgen.GeneratePassword() << seperator;
             }
         } else {
             ot.open(out_file);
-            for (int a = 0; a < GetCmdInt({"--count", "-c"}, 8) - 1; a++) {
+            for (int a = 0; a < GetCmdInt({"--count", "-c"}, 8); a++) {
                 ot << pgen.GeneratePassword() << seperator;
             }
         }
