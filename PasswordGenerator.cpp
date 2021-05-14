@@ -84,3 +84,9 @@ void PasswordGenerator::SetPasswordLength(int len)
     else
         std::cout << "Set amount of generated passwords is incorrect.\n";
 }
+
+void PasswordGenerator::SetPasswordSeed(int se)
+{
+    rnd_gen.seed(se);
+}
+

@@ -17,6 +17,8 @@ public:
     char GenerateMaskChar(char symbol);
     void SetPasswordMask(const std::string& mask);
     void SetPasswordLength(int len);
+    void SetPasswordSeed(int se);
+
     std::string GeneratePassword();
     PasswordGenerator() : rnd_gen(time(NULL))
     {
