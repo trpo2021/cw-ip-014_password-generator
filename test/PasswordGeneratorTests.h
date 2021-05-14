@@ -47,7 +47,7 @@ void PasswordGenParamsTest(lest::env& lest_env)
 {
     PasswordGenerator pgen;
     pgen.SetPasswordLength(15);
-    EXPECT(pgen.GeneratePassword().length() == 16); //15 + null terminator
+    EXPECT(pgen.GeneratePassword().length() == 15); 
     // Length must be changed by mask
     pgen.SetPasswordMask("LU-NS");
     std::string mask_pass = pgen.GeneratePassword();

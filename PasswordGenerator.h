@@ -9,14 +9,19 @@ private:
     std::mt19937_64 rnd_gen;
     int amount = 1;
     int length = 8;
-    inline bool IsValidInt(int num);
+    bool m_random_length = false;
+    inline bool IsValidInt(int num, bool limit_shift = false);
     std::string m_mask;
+    std::uniform_int_distribution<int> limit_for_random;
 
 public:
     char GenerateRandomChar(CHAR_TYPE char_type);
     char GenerateMaskChar(char symbol);
     void SetPasswordMask(const std::string& mask);
     void SetPasswordLength(int len);
+    void UseRandomPasswordLength(bool m_random_length);
+    void SetPasswordSeed(int se);
+
     std::string GeneratePassword();
     PasswordGenerator() : rnd_gen(time(NULL))
     {

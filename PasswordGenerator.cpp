@@ -9,10 +9,13 @@ std::uniform_int_distribution<int> LOW_LET_LIMIT(10, 35);
 std::uniform_int_distribution<int> UP_LET_LIMIT(36, 61);
 std::uniform_int_distribution<int> SPEC_SYM_LIMIT(63, 84);
 
-inline bool PasswordGenerator::IsValidInt(int num)
+
+inline bool PasswordGenerator::IsValidInt(int num, bool limit_shift)
 {
-    return (num >= 1 && num <= INT_MAX - 1);
+    return (num >= (limit_shift == true ? 1 : 0) && num <= INT_MAX - 1);
 }
+
+
 
 char PasswordGenerator::GenerateRandomChar(CHAR_TYPE char_type)
 {
@@ -61,6 +64,10 @@ std::string PasswordGenerator::GeneratePassword()
     std::string pass;
     if (m_mask.empty()) {
         pass.resize(length + 1);
+        if (m_random_length == true) {
+            limit_for_random = std::uniform_int_distribution<int>(1,length);
+            pass.resize(limit_for_random(rnd_gen));
+        }
         for (auto& x : pass)
             x = GenerateRandomChar(CHAR_TYPE::LOW_CHAR);
         return pass;
@@ -70,6 +77,7 @@ std::string PasswordGenerator::GeneratePassword()
             pass[a] = GenerateMaskChar(m_mask[a]);
         return pass;
     }
+
 }
 
 void PasswordGenerator::SetPasswordMask(const std::string& mask)
@@ -79,8 +87,22 @@ void PasswordGenerator::SetPasswordMask(const std::string& mask)
 
 void PasswordGenerator::SetPasswordLength(int len)
 {
-    if (IsValidInt(len))
-        length = len;
-    else
+    if (IsValidInt(len, true)) {
+        length = len - 1;
+    } else
         std::cout << "Set amount of generated passwords is incorrect.\n";
+}
+
+void PasswordGenerator::SetPasswordSeed(int se)
+{
+    if (IsValidInt(se))
+        rnd_gen.seed(se);
+    else
+        std::cout << "Set seed is incorrrect.\n";
+}
+
+void PasswordGenerator::UseRandomPasswordLength(bool random_length)
+{
+    m_random_length = random_length;
+    
 }
