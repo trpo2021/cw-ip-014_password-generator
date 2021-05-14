@@ -75,7 +75,7 @@ int GetCmdInt(std::initializer_list<char const* const> init_list, int def_val)
 
 int main(int argc, char* argv[])
 {
-    if (argc==1) {
+    if (argc == 1) {
         Help();
     } else {
         std::ofstream ot;
@@ -83,6 +83,7 @@ int main(int argc, char* argv[])
         cmdl.parse(
                 argc, argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
         pgen.SetPasswordLength(GetCmdInt({"--length", "-l"}, 8));
+        pgen.UseRandomPasswordLength(cmdl[{"--passRndLen", "-rl"}]);
         pgen.SetPasswordMask(cmdl({"--mask", "-m"}, "").str());
         pgen.SetPasswordSeed(GetCmdInt({"--seed", "-se"}, time(NULL)));
         std::string seperator = cmdl({"--seperator", "-s"}, '\n').str();
