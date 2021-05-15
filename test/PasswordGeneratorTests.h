@@ -62,3 +62,27 @@ CASE("Check SetPasswordMask/Length correctness")
 {
     PasswordGenParamsTest(lest_env);
 }
+
+void UseRandomPasswordLengthTest(lest::env& lest_env)
+{
+    PasswordGenerator pgen;
+    std::vector<std::string> passwords;
+    bool proverka=false;
+    pgen.SetPasswordLength(15);
+    EXPECT(pgen.GeneratePassword().length() == 15);
+    pgen.UseRandomPasswordLength(true);
+    for (int a = 0; a < 14; a++) {
+    passwords.push_back(pgen.GeneratePassword());
+    }
+    for (int a=1; a < 14; a++) {
+        if (passwords[a] != passwords[a - 1]) {
+            proverka = true;
+        }
+    }
+    EXPECT(proverka == true);
+}
+
+CASE("Check RandomPasswordLength correctness ")
+{
+    UseRandomPasswordLengthTest(lest_env);
+}
