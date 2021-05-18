@@ -88,15 +88,11 @@ int main(int argc, char* argv[])
         pgen.SetPasswordSeed(GetCmdInt({"--seed", "-se"}, time(NULL)));
         std::string seperator = cmdl({"--seperator", "-s"}, '\n').str();
         std::string out_file = cmdl({"--outFile", "-of"}, "").str();
-        if (out_file.empty()) {
-            for (int a = 0; a < GetCmdInt({"--count", "-c"}, 8); a++) {
-                std::cout << pgen.GeneratePassword() << seperator;
-            }
-        } else {
+        const bool is_console = out_file.empty();
+        if (!is_console)
             ot.open(out_file);
-            for (int a = 0; a < GetCmdInt({"--count", "-c"}, 8); a++) {
-                ot << pgen.GeneratePassword() << seperator;
-            }
-        }
+
+        for (int a = 0; a < GetCmdInt({"--count", "-c"}, 8); a++)
+            is_console ? std::cout : ot << pgen.GeneratePassword() << seperator;
     }
 }
