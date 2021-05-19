@@ -18,13 +18,13 @@ char PasswordGenerator::GenerateRandomChar(CHAR_TYPE char_type)
 {
     switch (char_type) {
     case CHAR_TYPE::UP_CHAR:
-        return CHARS_ARRAY[UP_LET_LIMIT(rnd_gen)];
+        return CHARS_ARRAY[UP_LET_LIMIT(m_rnd_gen)];
     case CHAR_TYPE::LOW_CHAR:
-        return CHARS_ARRAY[LOW_LET_LIMIT(rnd_gen)];
+        return CHARS_ARRAY[LOW_LET_LIMIT(m_rnd_gen)];
     case CHAR_TYPE::NUM_CHAR:
-        return CHARS_ARRAY[NUM_LET_LIMIT(rnd_gen)];
+        return CHARS_ARRAY[NUM_LET_LIMIT(m_rnd_gen)];
     case CHAR_TYPE::SPEC_CHAR:
-        return CHARS_ARRAY[SPEC_SYM_LIMIT(rnd_gen)];
+        return CHARS_ARRAY[SPEC_SYM_LIMIT(m_rnd_gen)];
     default:
         return '0'; // must be impossible because it only accepts CHAR_TYPE....
     }
@@ -50,10 +50,10 @@ std::string PasswordGenerator::GeneratePassword()
 {
     std::string pass;
     if (m_mask.empty()) {
-        pass.resize(length + 1);
+        pass.resize(m_length + 1);
         if (m_random_length == true) {
-            limit_for_random = std::uniform_int_distribution<int>(1, length);
-            pass.resize(limit_for_random(rnd_gen));
+            limit_for_random = std::uniform_int_distribution<int>(1, m_length);
+            pass.resize(limit_for_random(m_rnd_gen));
         }
         for (auto& x : pass)
             x = GenerateRandomChar(CHAR_TYPE::LOW_CHAR);
@@ -74,7 +74,7 @@ void PasswordGenerator::SetPasswordMask(const std::string& mask)
 void PasswordGenerator::SetPasswordLength(int len)
 {
     if (IsValidInt(len, true)) {
-        length = len - 1;
+        m_length = len - 1;
     } else
         std::cout << "Set amount of generated passwords is incorrect.\n";
 }
@@ -82,7 +82,7 @@ void PasswordGenerator::SetPasswordLength(int len)
 void PasswordGenerator::SetPasswordSeed(int se)
 {
     if (IsValidInt(se))
-        rnd_gen.seed(se);
+        m_rnd_gen.seed(se);
     else
         std::cout << "Set seed is incorrrect.\n";
 }

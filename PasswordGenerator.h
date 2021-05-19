@@ -6,9 +6,9 @@ enum class CHAR_TYPE { UP_CHAR, LOW_CHAR, NUM_CHAR, SPEC_CHAR };
 
 class PasswordGenerator {
 private:
-    std::mt19937_64 rnd_gen;
-    int amount = 1;
-    int length = 8;
+    std::mt19937_64 m_rnd_gen;
+    int m_amount = 1;
+    int m_length = 8;
     bool m_random_length = false;
     inline bool IsValidInt(int num, bool limit_shift = false);
     std::string m_mask;
@@ -23,7 +23,7 @@ public:
     void SetPasswordSeed(int se);
 
     std::string GeneratePassword();
-    PasswordGenerator() : rnd_gen(time(NULL))
+    PasswordGenerator() : m_rnd_gen(time(NULL))
     {
     }
 };
