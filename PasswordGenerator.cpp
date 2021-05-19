@@ -9,7 +9,7 @@ std::uniform_int_distribution<int> LOW_LET_LIMIT(10, 35);
 std::uniform_int_distribution<int> UP_LET_LIMIT(36, 61);
 std::uniform_int_distribution<int> SPEC_SYM_LIMIT(63, 84);
 
-inline bool PasswordGenerator::IsValidInt(int num, bool limit_shift)
+inline bool IsValidInt(int num, bool limit_shift)
 {
     return (num >= (limit_shift == true ? 1 : 0) && num <= INT_MAX - 1);
 }
@@ -17,13 +17,13 @@ inline bool PasswordGenerator::IsValidInt(int num, bool limit_shift)
 char PasswordGenerator::GenerateRandomChar(CHAR_TYPE char_type)
 {
     switch (char_type) {
-    case CHAR_TYPE::UP_CHAR:
+    case CHAR_TYPE::up_char:
         return CHARS_ARRAY[UP_LET_LIMIT(m_rnd_gen)];
-    case CHAR_TYPE::LOW_CHAR:
+    case CHAR_TYPE::low_char:
         return CHARS_ARRAY[LOW_LET_LIMIT(m_rnd_gen)];
-    case CHAR_TYPE::NUM_CHAR:
+    case CHAR_TYPE::num_char:
         return CHARS_ARRAY[NUM_LET_LIMIT(m_rnd_gen)];
-    case CHAR_TYPE::SPEC_CHAR:
+    case CHAR_TYPE::spec_char:
         return CHARS_ARRAY[SPEC_SYM_LIMIT(m_rnd_gen)];
     default:
         return '0'; // must be impossible because it only accepts CHAR_TYPE....
@@ -34,13 +34,13 @@ char PasswordGenerator::GenerateMaskChar(char symbol)
 {
     switch (symbol) {
     case 'L':
-        return GenerateRandomChar(CHAR_TYPE::LOW_CHAR);
+        return GenerateRandomChar(CHAR_TYPE::low_char);
     case 'U':
-        return GenerateRandomChar(CHAR_TYPE::UP_CHAR);
+        return GenerateRandomChar(CHAR_TYPE::up_char);
     case 'N':
-        return GenerateRandomChar(CHAR_TYPE::NUM_CHAR);
+        return GenerateRandomChar(CHAR_TYPE::num_char);
     case 'S':
-        return GenerateRandomChar(CHAR_TYPE::SPEC_CHAR);
+        return GenerateRandomChar(CHAR_TYPE::spec_char);
     default:
         return symbol;
     }
@@ -56,7 +56,7 @@ std::string PasswordGenerator::GeneratePassword()
             pass.resize(limit_for_random(m_rnd_gen));
         }
         for (auto& x : pass)
-            x = GenerateRandomChar(CHAR_TYPE::LOW_CHAR);
+            x = GenerateRandomChar(CHAR_TYPE::low_char);
         return pass;
     } else {
         pass.resize(m_mask.length() + 1);

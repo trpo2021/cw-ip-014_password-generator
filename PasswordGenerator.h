@@ -2,7 +2,9 @@
 #include <iostream>
 #include <random>
 
-enum class CHAR_TYPE { UP_CHAR, LOW_CHAR, NUM_CHAR, SPEC_CHAR };
+enum class CHAR_TYPE { up_char, low_char, num_char, spec_char };
+
+inline bool IsValidInt(int num, bool limit_shift = false);
 
 class PasswordGenerator {
 private:
@@ -10,7 +12,6 @@ private:
     int m_amount = 1;
     int m_length = 8;
     bool m_random_length = false;
-    inline bool IsValidInt(int num, bool limit_shift = false);
     std::string m_mask;
     std::uniform_int_distribution<int> limit_for_random;
 

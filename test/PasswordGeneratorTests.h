@@ -32,9 +32,9 @@ void CharGenValidTest(lest::env& lest_env)
 {
     PasswordGenerator pgen;
     for (int a = 0; a < 100; a++) {
-        EXPECT(std::isdigit(pgen.GenerateRandomChar(CHAR_TYPE::NUM_CHAR)) != 0);
-        EXPECT(std::isupper(pgen.GenerateRandomChar(CHAR_TYPE::UP_CHAR)) != 0);
-        EXPECT(std::islower(pgen.GenerateRandomChar(CHAR_TYPE::LOW_CHAR)) != 0);
+        EXPECT(std::isdigit(pgen.GenerateRandomChar(CHAR_TYPE::num_char)) != 0);
+        EXPECT(std::isupper(pgen.GenerateRandomChar(CHAR_TYPE::up_char)) != 0);
+        EXPECT(std::islower(pgen.GenerateRandomChar(CHAR_TYPE::low_char)) != 0);
     }
 }
 
