@@ -75,9 +75,7 @@ int GetCmdInt(std::initializer_list<char const* const> init_list, int def_val)
 
 int main(int argc, char* argv[])
 {
-    if (argc == 1) {
-        Help();
-    } else {
+    if (argc != 1) {
         std::ofstream ot;
         PasswordGenerator pgen;
         cmdl.parse(
@@ -94,5 +92,7 @@ int main(int argc, char* argv[])
 
         for (int a = 0; a < GetCmdInt({"--count", "-c"}, 8); a++)
             is_console ? std::cout : ot << pgen.GeneratePassword() << seperator;
+    } else {
+        Help();
     }
 }
