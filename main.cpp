@@ -77,21 +77,46 @@ int main(int argc, char* argv[])
 {
     if (argc != 1) {
         std::ofstream ot;
+        std::ifstream masks_stream;
         PasswordGenerator pgen;
         cmdl.parse(
                 argc, argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
         pgen.SetPasswordLength(GetCmdInt({"--length", "-l"}, 8));
         pgen.UseRandomPasswordLength(cmdl[{"--passRndLen", "-rl"}]);
-        pgen.SetPasswordMask(cmdl({"--mask", "-m"}, "").str());
         pgen.SetPasswordSeed(GetCmdInt({"--seed", "-se"}, time(NULL)));
         std::string seperator = cmdl({"--seperator", "-s"}, '\n').str();
         std::string out_file = cmdl({"--outFile", "-of"}, "").str();
-        const bool is_console = out_file.empty();
-        if (!is_console)
-            ot.open(out_file);
+        std::string mask_file = cmdl({"--maskList", "-ml"}, "").str();
 
-        for (int a = 0; a < GetCmdInt({"--count", "-c"}, 8); a++)
-            is_console ? std::cout : ot << pgen.GeneratePassword() << seperator;
+        const bool is_mask_file = !mask_file.empty();
+        if (is_mask_file) {
+            masks_stream.open(mask_file);
+            if (masks_stream.is_open()) {
+                std::vector<std::string> masks;
+                std::string buf;
+                while (std::getline(masks_stream, buf))
+
+                    masks.push_back(buf);
+                pgen.SetPasswordMasks(masks);
+            } else
+                std::cout << "Masklist " << mask_file << " not found";
+        } else
+            pgen.SetPasswordMask(cmdl({"--mask", "-m"}, "").str());
+
+        const bool is_console = out_file.empty();
+        if (!is_console) {
+            ot.open(out_file);
+            if (masks_stream.is_open())
+                std::cout << "Outfile " << mask_file << " not found";
+        }
+
+        for (int a = 0; a < GetCmdInt({"--count", "-c"}, 8); a++) {
+            if (is_console)
+                std::cout << pgen.GeneratePassword() << seperator;
+            else
+                ot << pgen.GeneratePassword() << seperator;
+        }
+
     } else {
         Help();
     }

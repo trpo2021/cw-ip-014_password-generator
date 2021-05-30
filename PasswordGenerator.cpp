@@ -49,6 +49,7 @@ char PasswordGenerator::GenerateMaskChar(char symbol)
 std::string PasswordGenerator::GeneratePassword()
 {
     std::string pass;
+
     if (m_mask.empty()) {
         pass.resize(m_length + 1);
         if (m_random_length == true) {
@@ -59,16 +60,22 @@ std::string PasswordGenerator::GeneratePassword()
             x = GenerateRandomChar(CHAR_TYPE::low_char);
         return pass;
     } else {
-        pass.resize(m_mask.length() + 1);
+        if (m_cur_mask_idx >= m_mask.size())
+            m_cur_mask_idx = 0;
+
+        pass.resize(m_mask[m_cur_mask_idx].length() + 1);
         for (int a = 0; a < pass.size(); a++)
-            pass[a] = GenerateMaskChar(m_mask[a]);
+            pass[a] = GenerateMaskChar(m_mask[m_cur_mask_idx][a]);
+
+        m_cur_mask_idx++;
         return pass;
     }
 }
 
 void PasswordGenerator::SetPasswordMask(const std::string& mask)
 {
-    m_mask = mask;
+    m_mask.clear();
+    m_mask.push_back(mask);
 }
 
 void PasswordGenerator::SetPasswordLength(int len)
@@ -90,4 +97,9 @@ void PasswordGenerator::SetPasswordSeed(int se)
 void PasswordGenerator::UseRandomPasswordLength(bool random_length)
 {
     m_random_length = random_length;
+}
+
+void PasswordGenerator::SetPasswordMasks(std::vector<std::string> mask)
+{
+    m_mask = mask;
 }
