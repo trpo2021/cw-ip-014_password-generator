@@ -53,21 +53,34 @@ std::string PasswordGenerator::GeneratePassword()
     if (m_mask.empty()) {
         pass.resize(m_length + 1);
         if (m_random_length == true) {
-            limit_for_random = std::uniform_int_distribution<int>(1, m_length);
-            pass.resize(limit_for_random(m_rnd_gen));
+            m_limit_for_random
+                    = std::uniform_int_distribution<int>(1, m_length);
+            pass.resize(m_limit_for_random(m_rnd_gen));
         }
         for (auto& x : pass)
             x = GenerateRandomChar(CHAR_TYPE::low_char);
         return pass;
     } else {
-        if (m_cur_mask_idx >= m_mask.size())
+
+        if (m_mlm == ML_MODE::forward && m_cur_mask_idx == m_mask.size())
             m_cur_mask_idx = 0;
+        else if (m_mlm == ML_MODE::backward && m_cur_mask_idx == -1)
+            m_cur_mask_idx = m_mask.size() - 1;
+        else if (m_mlm == ML_MODE::random)
+            m_cur_mask_idx = m_lim_mask_mode(m_rnd_gen);
+
 
         pass.resize(m_mask[m_cur_mask_idx].length() + 1);
         for (int a = 0; a < pass.size(); a++)
             pass[a] = GenerateMaskChar(m_mask[m_cur_mask_idx][a]);
 
-        m_cur_mask_idx++;
+        if (m_mlm == ML_MODE::forward)
+            m_cur_mask_idx++;
+        else if (m_mlm == ML_MODE::backward)
+            m_cur_mask_idx--;
+        else
+            m_cur_mask_idx = m_lim_mask_mode(m_rnd_gen);
+
         return pass;
     }
 }
@@ -101,5 +114,27 @@ void PasswordGenerator::UseRandomPasswordLength(bool random_length)
 
 void PasswordGenerator::SetPasswordMasks(std::vector<std::string> mask)
 {
+    if (mask.empty())
+        return;
     m_mask = mask;
+    m_lim_mask_mode = std::uniform_int_distribution<int>(0, mask.size()-1);
+}
+
+void PasswordGenerator::SetPasswordMaskMode(ML_MODE mlm)
+{   
+    if (IsValidMLMode(int(mlm))) {
+        m_mlm = mlm;
+        if (m_mlm == ML_MODE::backward)
+            m_cur_mask_idx = m_mask.size() - 1;
+    }
+    else
+        std::cout << "Invalid mask list mode.\n";
+}
+
+inline bool IsValidMLMode(int num)
+{
+    if (num >= int(ML_MODE::random) && num <= int(ML_MODE::backward))
+        return true;
+    else
+        return false;
 }

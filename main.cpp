@@ -84,6 +84,8 @@ int main(int argc, char* argv[])
         pgen.SetPasswordLength(GetCmdInt({"--length", "-l"}, 8));
         pgen.UseRandomPasswordLength(cmdl[{"--passRndLen", "-rl"}]);
         pgen.SetPasswordSeed(GetCmdInt({"--seed", "-se"}, time(NULL)));
+        pgen.SetPasswordMaskMode(ML_MODE(GetCmdInt({"--mlMode", "-mlm"},int(ML_MODE::forward))));
+        std::cout << GetCmdInt({"--mlMode", "-mlm"},int(ML_MODE::forward)) << "\n";
         std::string seperator = cmdl({"--seperator", "-s"}, '\n').str();
         std::string out_file = cmdl({"--outFile", "-of"}, "").str();
         std::string mask_file = cmdl({"--maskList", "-ml"}, "").str();
