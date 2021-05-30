@@ -62,3 +62,33 @@ CASE("Check SetPasswordMask/Length correctness")
 {
     PasswordGenParamsTest(lest_env);
 }
+
+void PasswordMaskModeTest(lest::env& lest_env)
+{
+    PasswordGenerator pgen;
+    pgen.SetPasswordMaskMode(ML_MODE::forward);
+    
+    std::vector<std::string> masks = {"N", "L", "U"};
+    pgen.SetPasswordMasks(masks);
+
+    std::string a=pgen.GeneratePassword();
+    EXPECT(std::isdigit(a[0]));
+    a=pgen.GeneratePassword();
+    EXPECT(std::islower(a[0]));
+    a=pgen.GeneratePassword();
+    EXPECT(std::isupper(a[0]));
+
+    pgen.SetPasswordMaskMode(ML_MODE::backward);
+    a=pgen.GeneratePassword();
+    EXPECT(std::isupper(a[0]));
+    a=pgen.GeneratePassword();
+    EXPECT(std::islower(a[0]));
+    a=pgen.GeneratePassword();
+    EXPECT(std::isdigit(a[0]));
+}
+
+CASE("PasswordMasksMode")
+{
+    PasswordMaskModeTest(lest_env);
+}
+
