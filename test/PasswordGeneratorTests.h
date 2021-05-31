@@ -1,6 +1,7 @@
 #pragma once
 #define lest_FEATURE_AUTO_REGISTER 1
 #include "PasswordGenerator.h"
+#include "PassGenFrontend.h"
 #include "lest.hpp"
 #include <algorithm>
 #include <string>

@@ -55,8 +55,6 @@ char PasswordGenerator::GenerateMaskChar(char symbol)
 std::string PasswordGenerator::GeneratePassword()
 {
     std::string pass;
-    if (m_masks.size() != 0 && m_masks[0] == "")
-        m_masks.clear();
 
     if (m_masks.empty()) {
         pass.resize(m_length + 1);
@@ -99,6 +97,7 @@ std::string PasswordGenerator::GeneratePassword()
 void PasswordGenerator::SetPasswordMask(const std::string& mask)
 {
     m_masks.clear();
+    if (!mask.empty())
     m_masks.push_back(mask);
 }
 

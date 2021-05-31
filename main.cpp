@@ -1,98 +1,5 @@
-#include "PasswordGenerator.h"
-#include "argh.h"
-#include <fstream>
-#include <iostream>
+#include "PassGenFrontend.h"
 
-auto cmdl = argh::parser();
-void Help(); // moved to the bottom part of code
-
-int GetCmdInt(std::initializer_list<char const* const> init_list, int def_val)
-{
-    std::string tmp = cmdl(init_list, def_val).str();
-    try {
-        return std::stoi(tmp);
-    } catch (std::exception& ex) {
-        std::cout << tmp << " is not a valid integer value\n";
-        return def_val;
-    }
-}
-
-int main(int argc, char* argv[])
-{
-    if (argc != 1) {
-        std::ofstream out_stream;
-        std::ifstream in_stream;
-
-        PasswordGenerator pgen;
-        cmdl.parse(
-                argc, argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
-
-        pgen.SetPasswordLength(GetCmdInt({"--length", "-l"}, 8));
-        pgen.UseRandomPasswordLength(cmdl[{"--passRndLen", "-rl"}]);
-        pgen.SetPasswordSeed(GetCmdInt({"--seed", "-se"}, time(NULL)));
-        pgen.SetPasswordMaskMode(ML_MODE(
-                GetCmdInt({"--mlMode", "-mlm"}, int(ML_MODE::forward))));
-        pgen.SetUsableSyms(cmdl({"--useSyms", "-us"}, "L").str());
-
-        std::string seperator = cmdl({"--seperator", "-s"}, '\n').str();
-        std::string out_file = cmdl({"--outFile", "-of"}, "").str();
-        std::string mask_file = cmdl({"--maskList", "-ml"}, "").str();
-        std::string alphabet_file
-                = cmdl({"--customAlphabetList", "-al"}, "").str();
-
-        //--maskList logic
-        const bool is_mask_file = !mask_file.empty();
-        if (is_mask_file) {
-            in_stream.open(mask_file);
-            if (in_stream.is_open()) {
-                std::vector<std::string> masks;
-                std::string buf;
-                while (std::getline(in_stream, buf))
-                    masks.push_back(buf);
-
-                pgen.SetPasswordMasks(masks);
-            } else
-                std::cout << "Masklist " << mask_file << " not found\n";
-        } else
-            pgen.SetPasswordMask(cmdl({"--mask", "-m"}, "").str());
-
-        //--outFile logic
-        const bool is_console = out_file.empty();
-        if (!is_console) {
-            out_stream.open(out_file);
-            if (!in_stream.is_open())
-                std::cout << "Outfile " << mask_file << " not found\n";
-        }
-
-        //--mlMode logic
-        const bool is_custom_alphabet = !alphabet_file.empty();
-        if (is_custom_alphabet) {
-            in_stream.open(alphabet_file);
-            if (!in_stream.is_open()) {
-                std::cout << "Custom alphabet file " << alphabet_file
-                          << " not found\n";
-            } else {
-                std::vector<char> symbols;
-                std::string buf;
-                while (std::getline(in_stream, buf, ' ')) {
-                    if (buf.size() > 0)
-                        symbols.push_back(buf[0]);
-                }
-                pgen.SetCustomAlphabet(symbols);
-            }
-        }
-
-        for (int a = 0; a < GetCmdInt({"--count", "-c"}, 8); a++) {
-            if (is_console)
-                std::cout << pgen.GeneratePassword() << seperator;
-            else
-                out_stream << pgen.GeneratePassword() << seperator;
-        }
-
-    } else {
-        Help();
-    }
-}
 
 void Help()
 {
@@ -101,10 +8,10 @@ void Help()
                  "Standart count of passwords is 1\n\n";
     std::cout << "If you want to set length of passwords use function "
                  "--len (-l)\n"
-                 "Standart length of passwords is 8 symbols\n\n";
+                 "Standard length of passwords is 8 symbols\n\n";
     std::cout << "If you want to set string separating the passwords use "
                  "function --separator (-sp)\n"
-                 "Standart separation is (\\n)\n\n";
+                 "Standard separation is (\\n)\n\n";
     std::cout << "If you want to use mask use function --mask (-m)\n"
                  "If you use mask parameters responsible for the type of "
                  "characters used and the length are ignored.\n"
@@ -150,4 +57,14 @@ void Help()
                  "be the correct path to the list file.\n The list is a "
                  "text file containing characters separated by a space "
                  "character ' '\n.\n";
+}
+
+
+int main(int argc, char* argv[])
+{
+    if (argc != 1) {
+        PassGenFrontend pf(argc, argv);
+    } else {
+        Help();
+    }
 }
