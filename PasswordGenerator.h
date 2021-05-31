@@ -2,6 +2,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <algorithm>
 
 enum class CHAR_TYPE { up_char, low_char, num_char, spec_char };
 enum class ML_MODE { random = 1, forward, backward };
