@@ -1,24 +1,27 @@
 #pragma once
 #include <iostream>
 #include <random>
+#include <set>
 #include <vector>
 
 enum class CHAR_TYPE { up_char, low_char, num_char, spec_char };
-enum class ML_MODE { random=1, forward, backward };
+enum class ML_MODE { random = 1, forward, backward };
 
 inline bool IsValidInt(int num, bool limit_shift = false);
 inline bool IsValidMLMode(int num);
 
 class PasswordGenerator {
 private:
-    std::mt19937_64 m_rnd_gen;
     int m_length = 8;
     bool m_random_length = false;
-    std::vector<std::string> m_mask;
     int m_cur_mask_idx = 0;
-    std::uniform_int_distribution<int> m_limit_for_random;
+    std::mt19937_64 m_rnd_gen;
+    std::uniform_int_distribution<int> m_lim_chr_gen;
     std::uniform_int_distribution<int> m_lim_mask_mode;
+    std::uniform_int_distribution<int> m_lim_use_syms;
     ML_MODE m_mlm = ML_MODE::forward;
+    std::vector<std::string> m_masks;
+    std::vector<CHAR_TYPE> m_usable_syms;
 
 public:
     char GenerateRandomChar(CHAR_TYPE char_type);
@@ -29,9 +32,8 @@ public:
     void UseRandomPasswordLength(bool m_random_length);
     void SetPasswordSeed(int se);
     void SetPasswordMaskMode(ML_MODE mlm);
+    void SetUsableSyms(std::string& syms);
 
     std::string GeneratePassword();
-    PasswordGenerator() : m_rnd_gen(time(NULL))
-    {
-    }
+    PasswordGenerator();
 };
