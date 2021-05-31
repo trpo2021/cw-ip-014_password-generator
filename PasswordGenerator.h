@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <random>
-#include <set>
 #include <vector>
 
 enum class CHAR_TYPE { up_char, low_char, num_char, spec_char };
@@ -22,6 +21,7 @@ private:
     ML_MODE m_mlm = ML_MODE::forward;
     std::vector<std::string> m_masks;
     std::vector<CHAR_TYPE> m_usable_syms;
+    std::vector<char> m_custom_chars;
 
 public:
     char GenerateRandomChar(CHAR_TYPE char_type);
@@ -33,6 +33,7 @@ public:
     void SetPasswordSeed(int se);
     void SetPasswordMaskMode(ML_MODE mlm);
     void SetUsableSyms(std::string& syms);
+    void SetCustomAlphabet(std::vector<char>& alpha);
 
     std::string GeneratePassword();
     PasswordGenerator();

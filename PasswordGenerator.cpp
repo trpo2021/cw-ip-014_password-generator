@@ -65,11 +65,15 @@ std::string PasswordGenerator::GeneratePassword()
             pass.resize(m_lim_chr_gen(m_rnd_gen));
         }
         for (auto& x : pass) {
-            auto v = m_usable_syms[m_lim_use_syms(m_rnd_gen)];
-            x = GenerateRandomChar(v);
+            if (m_custom_chars.size() == 0)
+                x = GenerateRandomChar(
+                        m_usable_syms[m_lim_use_syms(m_rnd_gen)]);
+            else
+                x = m_custom_chars[m_lim_use_syms(m_rnd_gen)];
         }
         return pass;
     } else {
+        // set inital idx if using multiple masks mode
         if (m_mlm == ML_MODE::forward && m_cur_mask_idx == m_masks.size())
             m_cur_mask_idx = 0;
         else if (m_mlm == ML_MODE::backward && m_cur_mask_idx == -1)
@@ -100,9 +104,9 @@ void PasswordGenerator::SetPasswordMask(const std::string& mask)
 
 void PasswordGenerator::SetPasswordLength(int len)
 {
-    if (IsValidInt(len, true)) {
+    if (IsValidInt(len, true))
         m_length = len - 1;
-    } else
+    else
         std::cout << "Set amount of generated passwords is incorrect.\n";
 }
 
@@ -121,7 +125,7 @@ void PasswordGenerator::UseRandomPasswordLength(bool random_length)
 
 void PasswordGenerator::SetPasswordMasks(std::vector<std::string> mask)
 {
-    if (mask.empty() || mask[0] == "")
+    if (mask.empty())
         return;
     m_masks = mask;
     m_lim_mask_mode = std::uniform_int_distribution<int>(0, mask.size() - 1);
@@ -166,4 +170,11 @@ void PasswordGenerator::SetUsableSyms(std::string& syms)
 
     m_lim_use_syms
             = std::uniform_int_distribution<int>(0, m_usable_syms.size() - 1);
+}
+
+void PasswordGenerator::SetCustomAlphabet(std::vector<char>& alpha)
+{
+    m_custom_chars = alpha;
+    m_lim_use_syms
+            = std::uniform_int_distribution<int>(0, m_custom_chars.size() - 1);
 }
