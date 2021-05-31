@@ -98,23 +98,25 @@ void PasswordGenerator::SetPasswordMask(const std::string& mask)
 {
     m_masks.clear();
     if (!mask.empty())
-    m_masks.push_back(mask);
+        m_masks.push_back(mask);
 }
 
-void PasswordGenerator::SetPasswordLength(int len)
+bool PasswordGenerator::SetPasswordLength(int len)
 {
-    if (IsValidInt(len, true))
+    if (IsValidInt(len, true)) {
         m_length = len - 1;
-    else
-        std::cout << "Set amount of generated passwords is incorrect.\n";
+        return true;
+    }
+    return false;
 }
 
-void PasswordGenerator::SetPasswordSeed(int se)
+bool PasswordGenerator::SetPasswordSeed(int se)
 {
-    if (IsValidInt(se))
+    if (IsValidInt(se)) {
         m_rnd_gen.seed(se);
-    else
-        std::cout << "Set seed is incorrrect.\n";
+        return true;
+    }
+    return false;
 }
 
 void PasswordGenerator::UseRandomPasswordLength(bool random_length)
@@ -130,14 +132,16 @@ void PasswordGenerator::SetPasswordMasks(std::vector<std::string> mask)
     m_lim_mask_mode = std::uniform_int_distribution<int>(0, mask.size() - 1);
 }
 
-void PasswordGenerator::SetPasswordMaskMode(ML_MODE mlm)
+bool PasswordGenerator::SetPasswordMaskMode(ML_MODE mlm)
 {
     if (IsValidMLMode(int(mlm))) {
         m_mlm = mlm;
         if (m_mlm == ML_MODE::backward)
             m_cur_mask_idx = m_masks.size() - 1;
-    } else
-        std::cout << "Invalid mask list mode.\n";
+
+        return true;
+    }
+    return false;
 }
 
 inline bool IsValidMLMode(int num)

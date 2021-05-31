@@ -29,10 +29,10 @@ public:
     char GenerateMaskChar(char symbol);
     void SetPasswordMask(const std::string& mask);
     void SetPasswordMasks(std::vector<std::string> mask);
-    void SetPasswordLength(int len);
-    void UseRandomPasswordLength(bool m_random_length);
-    void SetPasswordSeed(int se);
-    void SetPasswordMaskMode(ML_MODE mlm);
+    void UseRandomPasswordLength(bool random_length);
+    bool SetPasswordLength(int len);
+    bool SetPasswordSeed(int se);
+    bool SetPasswordMaskMode(ML_MODE mlm);
     void SetUsableSyms(const std::string& syms);
     void SetCustomAlphabet(std::vector<char>& alpha);
 

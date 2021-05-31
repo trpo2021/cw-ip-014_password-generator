@@ -20,11 +20,18 @@ PassGenFrontend::PassGenFrontend(int argc, char* argv[])
 {
     cmdl.parse(argc, argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
 
-    pgen.SetPasswordLength(GetCmdInt({"--length", "-l"}, 8));
+    if (pgen.SetPasswordLength(GetCmdInt({"--length", "-l"}, 8)) == false)
+        std::cout << "Set password length is incorrect.\n";
+
+    if (pgen.SetPasswordSeed(GetCmdInt({"--seed", "-se"}, time(NULL))) == false)
+        std::cout << "Set seed is incorrrect.\n";
+
+    if (pgen.SetPasswordMaskMode(
+                ML_MODE(GetCmdInt({"--mlMode", "-mlm"}, int(ML_MODE::forward))))
+        == false)
+        std::cout << "Invalid mask list mode.\n";
+
     pgen.UseRandomPasswordLength(cmdl[{"--passRndLen", "-rl"}]);
-    pgen.SetPasswordSeed(GetCmdInt({"--seed", "-se"}, time(NULL)));
-    pgen.SetPasswordMaskMode(
-            ML_MODE(GetCmdInt({"--mlMode", "-mlm"}, int(ML_MODE::forward))));
     pgen.SetUsableSyms(cmdl({"--useSyms", "-us"}, "L").str());
 
     ActivateCustomAlphabet();
@@ -49,7 +56,11 @@ void PassGenFrontend::ActivateCustomAlphabet()
             if (buf.size() > 0)
                 symbols.push_back(buf[0]);
         }
-        pgen.SetCustomAlphabet(symbols);
+        if (symbols.size() != 0)
+            pgen.SetCustomAlphabet(symbols);
+        else
+            std::cout << "Warning! Custom alphabet list is empty. Fallback to "
+                         "defaults.\n";
     }
 }
 
@@ -68,7 +79,11 @@ void PassGenFrontend::ActivateMLMode()
         while (std::getline(in_stream, buf))
             masks.push_back(buf);
 
-        pgen.SetPasswordMasks(masks);
+        if (masks.size() != 0)
+            pgen.SetPasswordMasks(masks);
+        else
+            std::cout << "Warning! Custom alphabet list is empty. Fallback to "
+                         "defaults.\n";
     } else
         std::cout << "Masklist " << mask_file << " not found\n";
 }
@@ -82,8 +97,6 @@ void PassGenFrontend::OutputPasswords()
         out_stream.open(out_file);
         if (out_stream.is_open())
             is_console = false;
-        else
-            std::cout << "Outfile " << out_file << " not found\n";
     }
 
     for (int a = 0; a < GetCmdInt({"--count", "-c"}, 8); a++) {
