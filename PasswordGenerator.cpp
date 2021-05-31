@@ -149,7 +149,7 @@ inline bool IsValidMLMode(int num)
         return false;
 }
 
-void PasswordGenerator::SetUsableSyms(std::string& syms)
+void PasswordGenerator::SetUsableSyms(const std::string& syms)
 {
     m_usable_syms.clear();
 

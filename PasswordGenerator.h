@@ -33,7 +33,7 @@ public:
     void UseRandomPasswordLength(bool m_random_length);
     void SetPasswordSeed(int se);
     void SetPasswordMaskMode(ML_MODE mlm);
-    void SetUsableSyms(std::string& syms);
+    void SetUsableSyms(const std::string& syms);
     void SetCustomAlphabet(std::vector<char>& alpha);
 
     std::string GeneratePassword();
