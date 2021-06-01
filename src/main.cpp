@@ -1,6 +1,5 @@
 #include "PassGenFrontend.h"
 
-
 void Help()
 {
     std::cout << "If you want to set count of passwords use function "
@@ -58,7 +57,6 @@ void Help()
                  "text file containing characters separated by a space "
                  "character ' '\n.\n";
 }
-
 
 int main(int argc, char* argv[])
 {
